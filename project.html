@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Microstrip Antenna Optimizer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: url('C:\Users\HP\OneDrive\Desktop\Major Final Project\img1.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      padding: 20px;
+      margin: 0;
+    }
+  
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+  
+    h2 {
+      text-align: center;
+    }
+  
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+  
+    input[type="number"], input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+  
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      width: 100%;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+    }
+  
+    .output {
+      margin-top: 20px;
+      background: #e8f5e9;
+      padding: 15px;
+      border-radius: 5px;
+    }
+  </style>
+  
+</head>
+<body>
+  <div class="container">
+    <h2>Microstrip Antenna Optimizer</h2>
+    <label>Frequency (GHz): <input type="number" id="frequency" step="0.01"></label>
+    <label>Dielectric Constant: <input type="number" id="dielectric" step="0.01"></label>
+    <label>Height (mm): <input type="number" id="height" step="0.01"></label>
+    <label>Probe Diameter d (mm): <input type="number" id="probe" step="0.01"></label>
+    <label>Feed Strip Length s (mm): <input type="number" id="feed" step="0.01"></label>
+    <label>Thickness t (mm): <input type="number" id="thickness" step="0.01"></label>
+
+    <button onclick="predict()">Predict Parameters</button>
+
+    <div class="output" id="output">
+      <p><strong>Gap g (mm):</strong> <span id="gap">-</span></p>
+      <p><strong>Width W (mm):</strong> <span id="width">-</span></p>
+      <p><strong>Length L (mm):</strong> <span id="length">-</span></p>
+    </div>
+  </div>
+
+  <script>
+    function predict() {
+      // Replace with real model prediction using backend or TensorFlow.js
+      const freq = parseFloat(document.getElementById("frequency").value);
+      const diel = parseFloat(document.getElementById("dielectric").value);
+      const h = parseFloat(document.getElementById("height").value);
+      const probe = parseFloat(document.getElementById("probe").value);
+      const feed = parseFloat(document.getElementById("feed").value);
+      const t = parseFloat(document.getElementById("thickness").value);
+
+      // Fake calculation (replace this with real ML model integration)
+      const gap = (freq * 0.1 + diel * 0.05 + h * 0.02).toFixed(2);
+      const width = (probe * 2 + feed * 0.3).toFixed(2);
+      const length = (t * 0.4 + freq * 0.2).toFixed(2);
+
+      document.getElementById("gap").textContent = gap;
+      document.getElementById("width").textContent = width;
+      document.getElementById("length").textContent = length;
+    }
+  </script>
+</body>
+</html>

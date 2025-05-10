@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Antenna Design Predictor</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: url('C:\Users\HP\OneDrive\Desktop\Major Final Project\img1.jpeg') no-repeat center center fixed;
+      background-size: cover;
+      backdrop-filter: blur(3px);
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 5% auto;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 30px;
+      border-radius: 20px;
+      color: #fff;
+      box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+      animation: slideUp 1.2s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    h1 {
+      text-align: center;
+      color: #00ffff;
+      margin-bottom: 25px;
+      text-shadow: 0 0 10px #00ffff;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      font-size: 1em;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #00ffff;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: background 0.3s ease;
+      box-shadow: 0 0 15px #00ffff;
+    }
+
+    button:hover {
+      background-color: #00dddd;
+    }
+
+    .results {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: #00ffff;
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Antenna Parameter Predictor</h1>
+    <label for="frequency">Frequency (GHz)</label>
+    <input type="number" id="frequency" step="0.1">
+
+    <label for="dielectric">Dielectric Constant</label>
+    <input type="number" id="dielectric" step="0.01">
+
+    <label for="height">Substrate Height (mm)</label>
+    <input type="number" id="height" step="0.01">
+
+    <label for="d">Probe Diameter (mm)</label>
+    <input type="number" id="d" step="0.01">
+
+    <label for="s">Feed Strip Length (mm)</label>
+    <input type="number" id="s" step="0.01">
+
+    <label for="t">Thickness (mm)</label>
+    <input type="number" id="t" step="0.01">
+
+    <button onclick="predict()">Predict</button>
+
+    <div class="results" id="results" style="display: none;"></div>
+  </div>
+
+  <script>
+    async function predict() {
+      const data = {
+        frequency: parseFloat(document.getElementById("frequency").value),
+        dielectric: parseFloat(document.getElementById("dielectric").value),
+        height: parseFloat(document.getElementById("height").value),
+        d: parseFloat(document.getElementById("d").value),
+        s: parseFloat(document.getElementById("s").value),
+        t: parseFloat(document.getElementById("t").value)
+      };
+
+      const response = await fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if (result.error) {
+        document.getElementById("results").innerHTML = `Error: ${result.error}`;
+        document.getElementById("results").style.color = 'red';
+      } else {
+        document.getElementById("results").innerHTML = `
+          <strong>Predicted Parameters:</strong><br>
+          Gap g (mm): ${result.g.toFixed(3)}<br>
+          Width W (mm): ${result.w.toFixed(3)}<br>
+          Length L (mm): ${result.l.toFixed(3)}
+        `;
+        document.getElementById("results").style.color = '#00ffff';
+      }
+
+      document.getElementById("results").style.display = 'block';
+    }
+  </script>
+</body>
+</html>
